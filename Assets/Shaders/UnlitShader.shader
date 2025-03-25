@@ -25,6 +25,7 @@ Shader "Custom/UnlitShader"
 
             fixed4 _Color;
             uniform sampler2D _MainTex;
+            uniform float4 _MainTex_ST;
 
             struct VertexInput
             {
@@ -42,7 +43,7 @@ Shader "Custom/UnlitShader"
             {
                 VertexOutput o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.texcoord.xy = v.texcoord;
+                o.texcoord.xy = (v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw);
                 return o;
             }
 
