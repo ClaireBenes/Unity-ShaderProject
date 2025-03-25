@@ -76,11 +76,6 @@ Shader "Custom/WaterShader"
             {
                 float4 color = tex2D(_MainTex, i.texcoord) * _Color;
 
-                // if(i.displacement > 0)
-                // {
-                //     color = tex2D(_MainTex, i.texcoord) * -i.vertex.y / 200;
-                // }
-                
                 return _Color * (1 - i.displacement ) + _SecondColor * i.displacement;
             }
             ENDCG

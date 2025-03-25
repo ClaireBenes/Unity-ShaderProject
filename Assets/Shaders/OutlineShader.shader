@@ -81,7 +81,7 @@ Shader "Custom/OutlineShader"
             VertexOutput vert (VertexInput v)
             {
                 VertexOutput o;
-                v.vertex = v.vertex * _Outline;
+                v.vertex = v.vertex * (1 + _Outline);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 return o;
             }
