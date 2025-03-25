@@ -66,11 +66,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amount: 4.31
+    - _Amplitude: 0.2
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Displacement: 0.59
+    - _Displacement: 0.27
     - _DstBlend: 0
+    - _Frequency: 4.31
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -80,6 +82,7 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _Speed: 0.45
     - _SrcBlend: 1
     - _Start: 0.4
     - _UVSec: 0
