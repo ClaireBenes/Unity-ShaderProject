@@ -4,7 +4,6 @@ Shader "Custom/LineShader"
     {
         _Color("Color", Color) = (1, 0, 0, 1)
         _MainTex("Main Texture", 2D) = "white"{}
-        _Start("Start", float) = 0.5
         _Width("Width", float) = 0.2
         _Amount("LineAmount", int) = 2
     }
@@ -29,13 +28,12 @@ Shader "Custom/LineShader"
             fixed4 _Color;
             uniform sampler2D _MainTex;
             uniform float4 _MainTex_ST;
-            float _Start;
             float _Width;
             int _Amount;
 
-            float drawLine(float2 uv, float start, float end)
+            float drawLine(float2 uv, float amount, float witdh)
             {
-                if(uv.x > start && uv.x < end)
+                if(uv.x % (1.0/amount) > 0 && uv.x % (1.0/amount) < witdh )
                 {
                     return 1;
                 }
@@ -65,7 +63,7 @@ Shader "Custom/LineShader"
             fixed4 frag (VertexOutput i) : SV_Target
             {
                 float4 color = tex2D(_MainTex, i.texcoord) * _Color;
-                color.a = drawLine(i.texcoord, _Start, _Start + _Width);
+                color.a = drawLine(i.texcoord, _Amount, _Width);
                 return color;
             }
             ENDCG

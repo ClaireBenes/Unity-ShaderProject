@@ -1,11 +1,10 @@
-Shader "Custom/GradientShader"
+Shader "Custom/WaterShader"
 {
     Properties
     {
         _Color("Color", Color) = (1, 0, 0, 1)
-        _MainTex("Main Texture", 2D) = "white"{}
         _SecondColor("Second Color", Color) = (1, 0, 0, 1)
-        _SecondTex("Second Texture", 2D) = "white"{}
+        _MainTex("Main Texture", 2D) = "white"{}
     }
     SubShader
     {
@@ -26,12 +25,9 @@ Shader "Custom/GradientShader"
             #include "UnityCG.cginc"
 
             fixed4 _Color;
+            fixed4 _SecondColor;
             uniform sampler2D _MainTex;
             uniform float4 _MainTex_ST;
-
-            fixed4 _SecondColor;
-            uniform sampler2D _SecondTex;
-            uniform float4 _SecondTex_ST;
 
             struct VertexInput
             {
@@ -55,9 +51,8 @@ Shader "Custom/GradientShader"
 
             fixed4 frag (VertexOutput i) : SV_Target
             {
-                float4 color = tex2D(_MainTex, i.texcoord) * i.texcoord.x * _Color;
-                float4 secondColor = tex2D(_SecondTex, i.texcoord) * (1-i.texcoord.x) * _SecondColor;
-                return (color * i.texcoord.x) + (secondColor * (1-i.texcoord.x));
+                float4 color = tex2D(_MainTex, i.texcoord);
+                return _Color * (1 - color.r) + _SecondColor * color.r ;
             }
             ENDCG
         }
