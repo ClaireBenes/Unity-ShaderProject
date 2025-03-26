@@ -1,18 +1,15 @@
-Shader "Custom/WaterShader"
+Shader "Custom/BallShader"
 {
     Properties
     {
         _Color("Color", Color) = (1, 0, 0, 1)
         _SecondColor("Second Color", Color) = (1, 0, 0, 1)
         _MainTex("Main Texture", 2D) = "white"{}
-        _Displacement("Displacement", float) = 0.5
-
-        _Speed("Speed", float) = 5.0
-        _Frequency("Frequency", float) = 0.5        
-        _Amplitude("Amplitude", float) = 2.0
+        _Width("Width", float) = 0.2
+        _Amount("LineAmount", int) = 2
     }
     SubShader
-    {
+    { 
         Tags{
         "Queue" = "Transparent"
         "RenderType" = "Transparent"
@@ -33,41 +30,34 @@ Shader "Custom/WaterShader"
             fixed4 _SecondColor;
             uniform sampler2D _MainTex;
             uniform float4 _MainTex_ST;
+            float _Width;
+            int _Amount;
 
-            float _Displacement;
-            float _Speed;
-            float _Frequency;
-            float _Amplitude;
-
-            float4 vertexAnimWave(float4 pos, float2 uv)
+            float4 drawLine(float2 uv, float amount, float witdh)
             {
-               pos.y = pos.y + sin((uv.x - _Time.y * _Speed) * _Frequency) * _Amplitude;
-               return pos;
-            }
+                if(uv.x % (1.0/amount) > 0 && uv.x % (1.0/amount) < witdh )
+                {
+                    return _Color;
+                }
+                return _SecondColor;
+            };
 
             struct VertexInput
             {
                 float4 vertex : POSITION;
                 float4 texcoord: TEXCOORD0;
-                float4 normal: NORMAL;
-                float displacement: COLOR;
             };
 
             struct VertexOutput
             {
                 float4 vertex : SV_POSITION;
                 float4 texcoord: TEXCOORD0;
-                float displacement: COLOR; 
             };
 
             VertexOutput vert (VertexInput v)
             {
-                VertexOutput o;        
-                o.displacement = tex2Dlod(_MainTex, v.texcoord * _MainTex_ST) * sin((v.texcoord - _Time.y * _Speed) * _Frequency) * _Amplitude;
-                v.vertex = vertexAnimWave(v.vertex + (v.normal * o.displacement * _Displacement) ,v.texcoord.xy ); 
-                //v.vertex = vertexAnimWave(v.vertex ,v.texcoord.xy );
-
-                o.vertex = UnityObjectToClipPos(v.vertex + (v.normal * o.displacement * _Displacement));
+                VertexOutput o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.texcoord.xy = (v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw);
                 return o;
             }
@@ -75,8 +65,9 @@ Shader "Custom/WaterShader"
             fixed4 frag (VertexOutput i) : SV_Target
             {
                 float4 color = tex2D(_MainTex, i.texcoord) * _Color;
+                color = drawLine(i.texcoord, _Amount, _Width);
 
-                return _Color * (1 - i.displacement ) + _SecondColor * i.displacement;
+                return color;
             }
             ENDCG
         }
