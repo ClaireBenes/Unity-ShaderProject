@@ -10,6 +10,8 @@ Shader "Custom/ToonWaterShader"
 
         _SurfaceNoiseCutoff("Surface Noise Cutoff", Range(0, 1)) = 0.777
         _FoamDistance("Foam Distance", Range(0, 10)) = 0.777
+        _Speed("Speed", float) = 5.0
+        _Direction("Direction", Vector) = (0.5,0.5,0,0)
     }
     SubShader
     {
@@ -35,6 +37,8 @@ Shader "Custom/ToonWaterShader"
 
             float _SurfaceNoiseCutoff;
             float _FoamDistance;
+            float _Speed;
+            fixed4 _Direction;
 
             struct VertexInput
             {
@@ -51,6 +55,8 @@ Shader "Custom/ToonWaterShader"
 
             VertexOutput vert (VertexInput v)
             {
+                v.uv.xy += (_Time.x * _Direction) * _Speed;
+
                 VertexOutput o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.screenPosition = ComputeScreenPos(o.vertex);
@@ -71,8 +77,8 @@ Shader "Custom/ToonWaterShader"
                 float foamDepthDifference01 = saturate(depthDifference / _FoamDistance);
                 float surfaceNoiseCutoff = foamDepthDifference01 * _SurfaceNoiseCutoff;
 
-                float surfaceNoise = tex2D(_NoiseTex, i.noiseUV) > _SurfaceNoiseCutoff ? 1 : 0;
-                return waterColor + surfaceNoise;;
+                float surfaceNoise = tex2D(_NoiseTex, i.noiseUV) > surfaceNoiseCutoff ? 1 : 0;
+                return waterColor + surfaceNoise;
             }
             ENDCG
         }
