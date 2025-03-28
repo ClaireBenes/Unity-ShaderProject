@@ -4,7 +4,6 @@ Shader "Custom/BallShader"
     {
         _Color("Color", Color) = (1, 0, 0, 1)
         _SecondColor("Second Color", Color) = (1, 0, 0, 1)
-        _MainTex("Main Texture", 2D) = "white"{}
         _Width("Width", float) = 0.2
         _Amount("LineAmount", int) = 2
     }
@@ -28,8 +27,6 @@ Shader "Custom/BallShader"
 
             fixed4 _Color;
             fixed4 _SecondColor;
-            uniform sampler2D _MainTex;
-            uniform float4 _MainTex_ST;
             float _Width;
             int _Amount;
 
@@ -58,14 +55,13 @@ Shader "Custom/BallShader"
             {
                 VertexOutput o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.texcoord.xy = (v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw);
+                o.texcoord.xy = (v.texcoord.xy);
                 return o;
             }
 
             fixed4 frag (VertexOutput i) : SV_Target
             {
-                float4 color = tex2D(_MainTex, i.texcoord) * _Color;
-                color = drawLine(i.texcoord, _Amount, _Width);
+                float4 color = drawLine(i.texcoord, _Amount, _Width);
 
                 return color;
             }

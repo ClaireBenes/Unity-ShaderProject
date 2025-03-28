@@ -2,11 +2,15 @@ Shader "Custom/BallToonShader"
 {
     Properties
     {
+        
+        _Color("Second Color", Color) = (1, 0, 0, 1)
+
         [Header(Ball Effect)]
-        [Space(10)]_Color("Color", Color) = (1, 0, 0, 1)
+        [Space(10)]_FirstColor("Color", Color) = (1, 0, 0, 1)
         _SecondColor("Second Color", Color) = (1, 0, 0, 1)
-        _Width("LineWidth", float) = 0.2
-        [IntRange]_Amount("LineAmount", Range (0, 15)) = 2
+        _LineWidth("LineWidth", float) = 0.2
+        [IntRange]_LineAmount("LineAmount", Range (0, 15)) = 2  
+        //_LineAmount("LineAmount", int) = 2
 
         [Header(Toon Effect)]
         [Space(10)]_Brightness("Brightness", Range(0, 1)) = 0.3
@@ -31,8 +35,15 @@ Shader "Custom/BallToonShader"
             #include "UnityCG.cginc"
          
             fixed4 _Color;
+
+            fixed4 _FirstColor;
+            fixed4 _SecondColor;
+            float _LineWidth;
+            int _LineAmount;
+
             sampler2D _MainTex;
             float4 _MainTex_ST;
+
             float _Brightness;
             float _Strenght;
             float _Detail;
@@ -43,32 +54,41 @@ Shader "Custom/BallToonShader"
                 return floor(normalDotLight / _Detail);
             }
 
+            float4 drawLine(float2 uv, float amount, float witdh)
+            {
+                if(uv.x % (1.0/amount) > 0 && uv.x % (1.0/amount) < witdh )
+                {
+                    return _FirstColor;
+                }
+                return _SecondColor;
+            };
+
             struct VertexInput
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 float3 normal: NORMAL;
             };
 
             struct VertexOutput
             {
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                half3 worldNormal : NORLMAL;
+                float3 worldNormal : NORLMAL;
             };
 
             VertexOutput vert (VertexInput v)
             {
                 VertexOutput o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv.xy = v.uv.xy;
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 return o;
             }
 
             fixed4 frag (VertexOutput i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 col = drawLine(i.uv, _LineAmount, _LineWidth);
                 col *= Toon(i.worldNormal, _WorldSpaceLightPos0.xyz) * _Color * _Strenght + _Brightness;
                 return col;
             }
