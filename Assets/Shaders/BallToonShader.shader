@@ -1,10 +1,12 @@
-Shader "Custom/ToonShader"
+Shader "Custom/BallToonShader"
 {
     Properties
     {
-        [Header(Main)]
+        [Header(Ball Effect)]
         [Space(10)]_Color("Color", Color) = (1, 0, 0, 1)
-        _MainTex ("Texture", 2D) = "white" {}
+        _SecondColor("Second Color", Color) = (1, 0, 0, 1)
+        _Width("LineWidth", float) = 0.2
+        [IntRange]_Amount("LineAmount", Range (0, 15)) = 2
 
         [Header(Toon Effect)]
         [Space(10)]_Brightness("Brightness", Range(0, 1)) = 0.3
