@@ -2,7 +2,7 @@
 
 This project explores **custom shader development in Unity**, built as part of a **school assignment**. It includes a collection of experimental and artistic shaders designed to enhance visual storytelling, from stylized surfaces to interactive effects.  
 
-📽️ **Watch the video demo**: [(your-google-drive-link-here)](https://drive.google.com/file/d/1G24tGIkOD_FH1lzcDmMdCdMo2i43DWOY/view?usp=drive_link)
+📽️ **Watch the video demo**: [(Google Drive Video)](https://drive.google.com/file/d/1G24tGIkOD_FH1lzcDmMdCdMo2i43DWOY/view?usp=drive_link)
 
 ## ✨ Features  
 
