@@ -16,7 +16,6 @@ This project explores **custom shader development in Unity**, built as part of a
 Showcasing a few visuals from the project:  
 
 ![image](https://github.com/user-attachments/assets/b4e9c2ea-212a-4fbd-a1cb-a2bdfaa03ab3) 
-![image](https://github.com/user-attachments/assets/8d5505b1-57ad-4bf6-a896-12695e63645e)
 ![image](https://github.com/user-attachments/assets/7f6b22af-0a53-4ca0-b800-c2d89fb6bfbf)
 
 ## 🎓 About  
